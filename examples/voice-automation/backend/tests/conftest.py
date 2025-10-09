@@ -1,20 +1,14 @@
 """Test configuration and fixtures."""
 
 import sys
-from unittest.mock import MagicMock
+import os
+from pathlib import Path
 
-# Mock chatkit module
-chatkit_mock = MagicMock()
-chatkit_mock.Server = MagicMock
-chatkit_mock.store = MagicMock()
-chatkit_mock.store.Store = object
-chatkit_mock.types = MagicMock()
-chatkit_mock.types.ThreadContext = MagicMock
-chatkit_mock.types.ThreadMetadata = MagicMock
-sys.modules['chatkit'] = chatkit_mock
+# Add the backend directory to the path so we can import app modules
+backend_dir = Path(__file__).parent.parent
+sys.path.insert(0, str(backend_dir))
 
-# Mock agents module
-agents_mock = MagicMock()
-agents_mock.Agent = MagicMock
-sys.modules['agents'] = agents_mock
+# Import pytest for fixtures
+import pytest
 
+# No more mocks - using real chatkit and agents SDKs!

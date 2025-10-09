@@ -118,3 +118,62 @@ class MemoryStore(Store[dict[str, Any]]):
         items = self._items.get(thread_id, [])
         self._items[thread_id] = [i for i in items if i.id != item_id]
 
+    async def delete_thread(
+        self, thread_id: str, context: dict[str, Any]
+    ) -> None:
+        """Delete a thread and all its items."""
+        if thread_id in self._threads:
+            del self._threads[thread_id]
+        if thread_id in self._items:
+            del self._items[thread_id]
+
+    async def load_threads(
+        self,
+        after: str | None,
+        limit: int,
+        order: Literal["asc", "desc"],
+        context: dict[str, Any],
+    ) -> Page[ThreadMetadata]:
+        """Load threads with pagination."""
+        threads = list(self._threads.values())
+        
+        # Sort by created_at
+        threads.sort(key=lambda t: t.created_at, reverse=(order == "desc"))
+        
+        # Find start index
+        start_idx = 0
+        if after:
+            for i, thread in enumerate(threads):
+                if thread.id == after:
+                    start_idx = i + 1
+                    break
+        
+        # Get page
+        page_threads = threads[start_idx : start_idx + limit]
+        has_more = len(threads) > start_idx + limit
+        
+        return Page(
+            data=page_threads,
+            has_more=has_more,
+            after=page_threads[-1].id if page_threads and has_more else None,
+        )
+
+    async def save_attachment(
+        self, thread_id: str, attachment_id: str, data: bytes, context: dict[str, Any]
+    ) -> None:
+        """Save attachment data (not implemented in memory store)."""
+        # For memory store, we don't persist attachments
+        # In production, this would save to file system or object storage
+        pass
+
+    async def load_attachment(
+        self, thread_id: str, attachment_id: str, context: dict[str, Any]
+    ) -> bytes:
+        """Load attachment data (not implemented in memory store)."""
+        raise NotImplementedError("Attachments not supported in MemoryStore")
+
+    async def delete_attachment(
+        self, thread_id: str, attachment_id: str, context: dict[str, Any]
+    ) -> None:
+        """Delete attachment (not implemented in memory store)."""
+        pass

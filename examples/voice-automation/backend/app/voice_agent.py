@@ -3,8 +3,8 @@
 import os
 from typing import Any
 
-from chatkit import Server
-from chatkit.types import ThreadContext
+from chatkit.server import ChatKitServer
+from chatkit.types import ThreadMetadata
 from agents import Agent
 
 
@@ -30,7 +30,7 @@ class VoiceAgent:
         )
         
         # Initialize ChatKit Server
-        self.server = Server(
+        self.server = ChatKitServer(
             store=self.store,
             agent=self.agent,
         )
@@ -65,28 +65,24 @@ Remember: You're operating through voice, so keep responses clear and concise.""
         self, 
         thread_id: str, 
         message: str, 
-        context: dict[str, Any]
+        context: dict[str, Any] | None = None
     ) -> str:
         """Process a voice message and return response.
         
         Args:
             thread_id: Thread ID for conversation context
             message: Voice message transcribed to text
-            context: Additional context (user info, etc.)
+            context: Additional context (user info, etc.) - optional
             
         Returns:
             Agent's text response (to be spoken)
         """
-        # Create thread context
-        thread_context = ThreadContext(
-            thread_id=thread_id,
-            context=context,
-        )
-        
-        # Run agent
+        # Run agent with thread_id directly
+        # SDK v1.0.0 handles threading internally via store
         response = await self.agent.run(
             messages=[{"role": "user", "content": message}],
-            thread=thread_context,
+            thread_id=thread_id,
+            context=context or {},
         )
         
         # Extract text from response
@@ -104,11 +100,10 @@ Remember: You're operating through voice, so keep responses clear and concise.""
         
         return "I processed your request."
 
-    def get_server(self) -> Server:
+    def get_server(self) -> ChatKitServer:
         """Get the ChatKit server instance.
         
         Returns:
             Configured ChatKit Server
         """
         return self.server
-

@@ -23,7 +23,7 @@ def mock_tools():
 def test_voice_agent_initialization(mock_store, mock_tools):
     """Test VoiceAgent initialization."""
     with patch("app.voice_agent.Agent"):
-        with patch("app.voice_agent.Server"):
+        with patch("app.voice_agent.ChatKitServer"):
             agent = VoiceAgent(store=mock_store, tools=mock_tools)
             
             assert agent.store == mock_store
@@ -33,7 +33,7 @@ def test_voice_agent_initialization(mock_store, mock_tools):
 def test_system_prompt_generation(mock_store):
     """Test system prompt is properly generated."""
     with patch("app.voice_agent.Agent"):
-        with patch("app.voice_agent.Server"):
+        with patch("app.voice_agent.ChatKitServer"):
             agent = VoiceAgent(store=mock_store)
             prompt = agent._get_system_prompt()
             
@@ -46,7 +46,7 @@ def test_system_prompt_generation(mock_store):
 async def test_process_message_string_response(mock_store):
     """Test processing message with string response."""
     with patch("app.voice_agent.Agent") as MockAgent:
-        with patch("app.voice_agent.Server"):
+        with patch("app.voice_agent.ChatKitServer"):
             # Mock agent response
             mock_agent_instance = MagicMock()
             mock_response = MagicMock()
@@ -70,7 +70,7 @@ async def test_process_message_string_response(mock_store):
 async def test_process_message_list_response(mock_store):
     """Test processing message with list response."""
     with patch("app.voice_agent.Agent") as MockAgent:
-        with patch("app.voice_agent.Server"):
+        with patch("app.voice_agent.ChatKitServer"):
             # Mock agent response with list content
             mock_agent_instance = MagicMock()
             mock_response = MagicMock()
@@ -97,7 +97,7 @@ async def test_process_message_list_response(mock_store):
 async def test_process_message_fallback(mock_store):
     """Test fallback response when content format is unexpected."""
     with patch("app.voice_agent.Agent") as MockAgent:
-        with patch("app.voice_agent.Server"):
+        with patch("app.voice_agent.ChatKitServer"):
             # Mock agent response without content
             mock_agent_instance = MagicMock()
             mock_response = MagicMock(spec=[])  # No 'content' attribute
@@ -118,7 +118,7 @@ async def test_process_message_fallback(mock_store):
 def test_get_server(mock_store):
     """Test getting the ChatKit server instance."""
     with patch("app.voice_agent.Agent"):
-        with patch("app.voice_agent.Server") as MockServer:
+        with patch("app.voice_agent.ChatKitServer") as MockServer:
             mock_server_instance = MagicMock()
             MockServer.return_value = mock_server_instance
             

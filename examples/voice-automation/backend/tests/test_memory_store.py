@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime, timezone
 
 from app.memory_store import MemoryStore
-from chatkit.types import ThreadMetadata, UserMessageItem, TextContent
+from chatkit.types import ThreadMetadata, UserMessageItem, UserMessageTextContent, InferenceOptions
 
 
 @pytest.mark.asyncio
@@ -15,6 +15,7 @@ async def test_create_and_load_thread():
         id=store.generate_thread_id({}),
         title="Test Thread",
         created_at=datetime.now(timezone.utc),
+        inference_options=InferenceOptions(),
     )
 
     created = await store.create_thread(thread, {})
@@ -36,8 +37,9 @@ async def test_add_and_load_items():
     item = UserMessageItem(
         id=store.generate_item_id("message", thread, {}),
         thread_id=thread.id,
-        content=[TextContent(type="text", text="Hello")],
+        content=[UserMessageTextContent(type="input_text", text="Hello")],
         created_at=datetime.now(timezone.utc),
+        inference_options=InferenceOptions(),
     )
 
     await store.add_thread_item(thread.id, item, {})
@@ -64,8 +66,9 @@ async def test_pagination():
         item = UserMessageItem(
             id=store.generate_item_id("message", thread, {}),
             thread_id=thread.id,
-            content=[TextContent(type="text", text=f"Message {i}")],
+            content=[UserMessageTextContent(type="input_text", text=f"Message {i}")],
             created_at=datetime.now(timezone.utc),
+        inference_options=InferenceOptions(),
         )
         await store.add_thread_item(thread.id, item, {})
         items.append(item)
@@ -99,8 +102,9 @@ async def test_delete_item():
     item = UserMessageItem(
         id=store.generate_item_id("message", thread, {}),
         thread_id=thread.id,
-        content=[TextContent(type="text", text="Hello")],
+        content=[UserMessageTextContent(type="input_text", text="Hello")],
         created_at=datetime.now(timezone.utc),
+        inference_options=InferenceOptions(),
     )
     await store.add_thread_item(thread.id, item, {})
 
@@ -119,4 +123,3 @@ async def test_thread_not_found():
 
     with pytest.raises(ValueError, match="Thread .* not found"):
         await store.load_thread("nonexistent", {})
-

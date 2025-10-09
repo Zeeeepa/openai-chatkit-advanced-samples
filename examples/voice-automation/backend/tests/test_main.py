@@ -104,6 +104,10 @@ def test_process_voice_missing_message(client):
             json={}
         )
         
+        # Log the response for debugging
+        print(f"Response status: {response.status_code}")
+        print(f"Response content: {response.text}")
+        
         assert response.status_code == 400
         
         data = response.json()
@@ -149,4 +153,3 @@ async def test_process_voice_error_handling():
         
         data = response.json()
         assert "error" in data
-

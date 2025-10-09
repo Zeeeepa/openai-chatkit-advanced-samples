@@ -102,14 +102,17 @@ async def process_voice(data: dict):
     
     try:
         message = data.get("message", "")
-        thread_id = data.get("thread_id", store.generate_thread_id({}))
         context = data.get("context", {})
         
+        # Validate message first
         if not message:
             return JSONResponse(
                 status_code=400,
                 content={"error": "Message is required"}
             )
+        
+        # Generate thread_id after validation
+        thread_id = data.get("thread_id", store.generate_thread_id({}))
         
         # Process message
         response = await agent.process_message(
@@ -144,4 +147,3 @@ if __name__ == "__main__":
         reload=True,
         log_level=os.getenv("LOG_LEVEL", "info").lower()
     )
-
