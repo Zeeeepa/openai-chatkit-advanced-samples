@@ -9,6 +9,9 @@ interface VoiceInterfaceProps {
 export function VoiceInterface({ threadId, isListening, onListeningChange }: VoiceInterfaceProps) {
   const [transcript, setTranscript] = useState('')
   const [recognition, setRecognition] = useState<any>(null)
+  
+  // TODO: Use threadId when backend integration is complete
+  console.log('Voice Interface - threadId:', threadId);
 
   useEffect(() => {
     // Initialize Web Speech API
@@ -68,4 +71,3 @@ export function VoiceInterface({ threadId, isListening, onListeningChange }: Voi
     </div>
   )
 }
-

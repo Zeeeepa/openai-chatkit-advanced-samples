@@ -5,6 +5,9 @@ interface ChatKitPanelProps {
 
 export function ChatKitPanel({ threadId, onThreadIdChange }: ChatKitPanelProps) {
   // Placeholder - ChatKit React integration in Step 22
+  // TODO: Use onThreadIdChange when ChatKit integration is complete
+  console.log('ChatKit Panel - onThreadIdChange:', onThreadIdChange);
+  
   return (
     <div className="chatkit-panel">
       <h2>Chat History</h2>
@@ -19,4 +22,3 @@ export function ChatKitPanel({ threadId, onThreadIdChange }: ChatKitPanelProps) 
     </div>
   )
 }
-
