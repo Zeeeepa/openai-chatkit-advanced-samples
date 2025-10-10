@@ -1,36 +1,37 @@
 {
-  "name": "voice-automation-frontend",
+  "name": "voice-automation-platform-frontend",
   "version": "1.0.0",
-  "description": "Voice Automation Platform - Frontend",
+  "description": "Voice-controlled multi-agent automation system frontend",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\""
   },
   "dependencies": {
-    "next": "^14.0.0",
+    "next": "14.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@tanstack/react-query": "^5.17.0",
-    "axios": "^1.6.0",
-    "zustand": "^4.4.0",
-    "lucide-react": "^0.300.0",
-    "clsx": "^2.0.0",
-    "tailwind-merge": "^2.2.0"
+    "lucide-react": "^0.323.0"
   },
   "devDependencies": {
-    "@types/node": "^20.10.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "typescript": "^5.3.0",
-    "tailwindcss": "^3.4.0",
-    "postcss": "^8.4.32",
-    "autoprefixer": "^10.4.16",
+    "@types/node": "^20.11.16",
+    "@types/react": "^18.2.52",
+    "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
-    "eslint-config-next": "^14.0.0"
+    "eslint-config-next": "14.1.0",
+    "postcss": "^8.4.33",
+    "prettier": "^3.2.5",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }
 

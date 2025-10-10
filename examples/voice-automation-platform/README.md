@@ -1,233 +1,364 @@
 # 🎙️ Voice Automation Platform
 
-A complete voice-controlled multi-agent automation system built with OpenAI ChatKit, FastAPI, and Next.js.
+A production-ready, voice-controlled multi-agent automation system powered by OpenAI ChatKit and FastAPI.
 
-## 📋 Overview
+## 📋 Table of Contents
 
-This platform demonstrates a production-ready voice automation system that allows users to control AI agents through natural language voice commands. It showcases the full power of OpenAI's ChatKit integration with:
+- [Overview](#overview)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Quick Start](#quick-start)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [API Documentation](#api-documentation)
+- [Examples](#examples)
+- [Development](#development)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
 
-- **Voice-Controlled Operations**: Execute complex tasks with simple voice commands
-- **Multi-Agent System**: Orchestrator, Research, Code, and Validator agents working together
-- **MCP Server Integration**: Extensible tool system with CLI, web search, and file management
-- **Real-Time Updates**: WebSocket-based live monitoring of tasks and agents
-- **Modern UI**: Responsive React interface with real-time status indicators
+## 🌟 Overview
 
-## 🏗️ Architecture
+Voice Automation Platform enables you to control a sophisticated multi-agent AI system using natural voice commands. The system coordinates specialized agents that work together to accomplish complex tasks like research, code generation, testing, and more.
 
-```
-┌─────────────────┐
-│  Voice Command  │
-└────────┬────────┘
-         │
-┌────────▼────────┐      ┌──────────────┐
-│   Main Agent    │◄────►│   MCP Tools  │
-│ (Orchestrator)  │      │  - CLI Exec  │
-└────────┬────────┘      │  - Web Search│
-         │               │  - FileManager│
-    ┌────┼────┐          └──────────────┘
-    │    │    │
-    ▼    ▼    ▼
-┌────────┬────────┬────────┐
-│Research│  Code  │Validator│
-│ Agent  │ Agent  │ Agent   │
-└────────┴────────┴─────────┘
-         │
-    ┌────┴────┐
-    ▼         ▼
-┌─────────┬─────────┐
-│ FastAPI │WebSocket│
-│   REST  │Real-Time│
-└────┬────┴────┬────┘
-     │         │
-┌────▼─────────▼────┐
-│   Next.js React   │
-│   Frontend        │
-└───────────────────┘
-```
+### Key Capabilities
+
+- 🎤 **Voice Control**: Natural language commands to trigger automation
+- 🤖 **Multi-Agent System**: 4 specialized agents working collaboratively
+- 🔧 **MCP Tools**: Extensible tool system (CLI, Web Search, File Manager)
+- 🔄 **Real-time Updates**: WebSocket-based live progress tracking
+- 📡 **Event-Driven**: Webhook system for agent communication
+- 🎨 **Modern UI**: Responsive Next.js dashboard
 
 ## ✨ Features
 
 ### Backend (FastAPI)
-- ✅ **Voice Command Processing**: Natural language understanding and task execution
-- ✅ **Multi-Agent System**: 4 specialized agents with role-based task distribution
-- ✅ **MCP Tools**: Secure CLI execution, web search, file management
-- ✅ **WebSocket Server**: Real-time updates for tasks and agents
-- ✅ **RESTful API**: Complete CRUD operations for tasks, agents, and tools
+- ✅ **Multi-Agent Orchestration**: Main agent coordinates specialized sub-agents
+- ✅ **4 Specialized Agents**:
+  - **Orchestrator**: Plans and coordinates complex workflows
+  - **Research**: Gathers information and analyzes data
+  - **Code**: Generates, reviews, and tests code
+  - **Validator**: Ensures quality and correctness
+- ✅ **3 MCP Tools**:
+  - **CLI Executor**: Run system commands safely
+  - **Web Search**: Search and scrape web content
+  - **File Manager**: Read, write, and manage files
+- ✅ **REST API**: 20+ endpoints for complete system control
+- ✅ **WebSocket**: Real-time task and agent status updates
 - ✅ **Webhook System**: Event-driven inter-agent communication
-- ✅ **Statistics & Monitoring**: Task and agent performance tracking
+- ✅ **Memory Store**: Persistent conversation and result storage
 
-### Frontend (Next.js + React)
-- ✅ **Voice Interface**: Voice input with mock speech recognition (ready for Web Speech API)
-- ✅ **Task Dashboard**: Real-time task status with filtering and stats
-- ✅ **Agent Monitor**: Live agent status with spawn/remove controls
-- ✅ **MCP Manager**: Browse and execute available tools
-- ✅ **WebSocket Integration**: Live updates without page refresh
-- ✅ **Responsive Design**: Mobile-friendly with collapsible sidebar
-- ✅ **Type-Safe**: Full TypeScript implementation
+### Frontend (Next.js 14)
+- ✅ **Voice Interface**: Speech-to-text command input
+- ✅ **Task Dashboard**: Real-time task monitoring and statistics
+- ✅ **Agent Monitor**: Live agent status and management
+- ✅ **MCP Manager**: Browse and execute tools
+- ✅ **Responsive Design**: Mobile-friendly interface
+- ✅ **WebSocket Integration**: Live updates without refresh
 
-## 🚀 Getting Started
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Voice Interface (UI)                     │
+│                                                               │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │ Voice Input  │  │ Task Monitor │  │ Agent Status │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+└───────────────────────────────┬─────────────────────────────┘
+                                │
+                        WebSocket / REST API
+                                │
+┌───────────────────────────────┴─────────────────────────────┐
+│                     FastAPI Backend                          │
+│                                                               │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │              Main Agent (Orchestrator)                  │ │
+│  │                                                          │ │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐            │ │
+│  │  │ Research │  │   Code   │  │Validator │            │ │
+│  │  │  Agent   │  │  Agent   │  │  Agent   │            │ │
+│  │  └─────┬────┘  └─────┬────┘  └─────┬────┘            │ │
+│  └────────┼─────────────┼─────────────┼──────────────────┘ │
+│           │             │             │                      │
+│  ┌────────┴─────────────┴─────────────┴──────────────────┐ │
+│  │                    MCP Tools                            │ │
+│  │                                                          │ │
+│  │  ┌────────────┐  ┌────────────┐  ┌────────────┐       │ │
+│  │  │    CLI     │  │    Web     │  │    File    │       │ │
+│  │  │  Executor  │  │   Search   │  │  Manager   │       │ │
+│  │  └────────────┘  └────────────┘  └────────────┘       │ │
+│  └──────────────────────────────────────────────────────────┘ │
+│                                                               │
+│  ┌──────────────────────────────────────────────────────────┐ │
+│  │                  Webhook System                          │ │
+│  │  (Event-driven agent communication)                      │ │
+│  └──────────────────────────────────────────────────────────┘ │
+└───────────────────────────────────────────────────────────────┘
+```
+
+### Data Flow
+
+1. **Voice Command** → User speaks command to frontend
+2. **API Request** → Frontend sends command to `/api/voice/command`
+3. **Task Creation** → Backend creates task and assigns to main agent
+4. **Agent Orchestration** → Main agent spawns specialized sub-agents
+5. **Tool Execution** → Agents use MCP tools to accomplish subtasks
+6. **Webhook Events** → Agents emit events as they complete work
+7. **WebSocket Updates** → Frontend receives real-time progress updates
+8. **Result Delivery** → Completed task result returned to user
+
+## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.11+
+
+- Python 3.9+ 
 - Node.js 18+
 - OpenAI API key
 
-### Backend Setup
+### One-Command Setup
 
-1. Navigate to backend directory:
+**Unix/Linux/macOS:**
 ```bash
-cd examples/voice-automation-platform/backend
+./setup.sh
 ```
 
-2. Create and activate virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+**Windows (PowerShell):**
+```powershell
+.\setup.ps1
 ```
 
-3. Install dependencies:
+### Start Development Servers
+
+**Unix/Linux/macOS:**
 ```bash
+./dev-start.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+.\dev-start.ps1
+```
+
+Then open:
+- Frontend: http://localhost:3000
+- API Docs: http://localhost:8000/api/docs
+
+## 📦 Installation
+
+### Manual Installation
+
+#### Backend Setup
+
+```bash
+cd backend
+
+# Create virtual environment
+python3 -m venv venv
+
+# Activate virtual environment
+source venv/bin/activate  # Unix/Linux/macOS
+# OR
+.\venv\Scripts\Activate.ps1  # Windows
+
+# Install dependencies
 pip install -r requirements.txt
-```
 
-4. Create `.env` file:
-```bash
+# Configure environment
 cp .env.example .env
 # Edit .env and add your OPENAI_API_KEY
 ```
 
-5. Run the server:
+#### Frontend Setup
+
 ```bash
-uvicorn app.main:app --reload
-```
+cd frontend
 
-Backend will be available at `http://localhost:8000`
-- API Docs: `http://localhost:8000/docs`
-- Health Check: `http://localhost:8000/health`
-
-### Frontend Setup
-
-1. Navigate to frontend directory:
-```bash
-cd examples/voice-automation-platform/frontend
-```
-
-2. Install dependencies:
-```bash
+# Install dependencies
 npm install
-# or
-yarn install
-```
 
-3. Create `.env.local` file:
-```bash
+# Configure environment
 cp .env.example .env.local
+# Edit .env.local if needed
 ```
 
-4. Run development server:
-```bash
-npm run dev
-# or
-yarn dev
-```
+## ⚙️ Configuration
 
-Frontend will be available at `http://localhost:3000`
+### Backend Configuration (`.env`)
 
-## 📚 API Endpoints
+```env
+# Required
+OPENAI_API_KEY=sk-your-key-here
 
-### Voice Commands
-- `POST /api/voice/command` - Process voice command
-- `GET /api/voice/status/{task_id}` - Get command status
-
-### Tasks
-- `GET /api/tasks/` - List all tasks
-- `POST /api/tasks/` - Create new task
-- `GET /api/tasks/{task_id}` - Get task details
-- `DELETE /api/tasks/{task_id}` - Delete task
-- `GET /api/tasks/stats/summary` - Get task statistics
-
-### Agents
-- `GET /api/agents/` - List all agents
-- `POST /api/agents/spawn/{role}` - Spawn new agent
-- `GET /api/agents/{agent_id}` - Get agent details
-- `DELETE /api/agents/{agent_id}` - Remove agent
-- `GET /api/agents/stats/summary` - Get agent statistics
-
-### MCP Tools
-- `GET /api/mcp/tools` - List all tools
-- `GET /api/mcp/tools/{tool_name}` - Get tool details
-- `POST /api/mcp/execute` - Execute tool
-- `GET /api/mcp/servers` - List MCP servers
-- `POST /api/mcp/servers/{name}/start` - Start MCP server
-- `POST /api/mcp/servers/{name}/stop` - Stop MCP server
-
-### WebSocket
-- `WS /ws/updates` - Real-time updates
-- `WS /ws/agent/{agent_id}` - Agent-specific updates
-
-## 🔧 Configuration
-
-### Backend (`backend/.env`)
-```bash
-OPENAI_API_KEY=your_key_here
-OPENAI_MODEL=gpt-4
+# Server
 HOST=0.0.0.0
 PORT=8000
-CORS_ORIGINS=["http://localhost:3000"]
+DEBUG=True
+
+# Features
+ENABLE_VOICE_INPUT=True
+ENABLE_WEBHOOKS=True
+
+# See backend/.env.example for all options
 ```
 
-### Frontend (`frontend/.env.local`)
-```bash
+### Frontend Configuration (`.env.local`)
+
+```env
+# API URLs
 NEXT_PUBLIC_API_URL=http://localhost:8000
-NEXT_PUBLIC_WS_URL=ws://localhost:8000
+NEXT_PUBLIC_WS_URL=ws://localhost:8000/ws
+
+# Features
+NEXT_PUBLIC_VOICE_ENABLED=true
+NEXT_PUBLIC_DEFAULT_LANGUAGE=en-US
+
+# See frontend/.env.example for all options
 ```
 
-## 🎯 Usage Examples
+## 🎯 Usage
 
 ### Voice Commands
 
-1. **Search for Information**:
-   - "Search for Python best practices"
-   - "Find documentation on FastAPI"
-   - "Research React hooks"
+Simply speak or type commands like:
 
-2. **Generate Code**:
-   - "Create a Python function to sort arrays"
-   - "Generate a React component for user profile"
-   - "Write a SQL query to join tables"
+- "Research the latest trends in AI agents and create a report"
+- "Review the code in the utils directory"
+- "Scrape the latest AI news from TechCrunch and summarize"
+- "Process all JSON files in the data directory"
+- "Create a REST API for a todo application with tests"
 
-3. **File Operations**:
-   - "List files in the project directory"
-   - "Read the config file"
-   - "Create a new directory called 'data'"
-
-### API Usage
+### Programmatic API
 
 ```python
-import requests
+import httpx
 
-# Process voice command
-response = requests.post(
+# Send voice command
+response = httpx.post(
     "http://localhost:8000/api/voice/command",
     json={
-        "command": "Search for AI agents documentation",
+        "command": "Research AI trends and create a summary",
         "language": "en-US"
     }
 )
-print(response.json())
 
-# List all tasks
-tasks = requests.get("http://localhost:8000/api/tasks/")
-print(tasks.json())
+task_id = response.json()["task_id"]
 
-# Spawn a research agent
-agent = requests.post(
-    "http://localhost:8000/api/agents/spawn/research"
-)
-print(agent.json())
+# Check task status
+status = httpx.get(f"http://localhost:8000/api/tasks/{task_id}")
+print(status.json())
+```
+
+### WebSocket Connection
+
+```javascript
+const ws = new WebSocket('ws://localhost:8000/ws');
+
+ws.onmessage = (event) => {
+  const message = JSON.parse(event.data);
+  console.log('Event:', message.event, message.data);
+};
+
+// Subscribe to specific events
+ws.send(JSON.stringify({
+  type: 'subscribe',
+  events: ['task_updated', 'agent_spawned']
+}));
+```
+
+## 📚 API Documentation
+
+### Endpoints
+
+#### Voice Control
+- `POST /api/voice/command` - Send voice command
+- `GET /api/voice/status` - Voice service status
+- `GET /api/voice/tasks/{id}` - Get voice task status
+
+#### Task Management
+- `GET /api/tasks` - List all tasks
+- `POST /api/tasks` - Create new task
+- `GET /api/tasks/{id}` - Get task details
+- `PUT /api/tasks/{id}` - Update task
+- `DELETE /api/tasks/{id}` - Cancel task
+- `GET /api/tasks/stats` - Task statistics
+
+#### Agent Management
+- `GET /api/agents` - List all agents
+- `POST /api/agents` - Spawn new agent
+- `GET /api/agents/{id}` - Get agent details
+- `GET /api/agents/{id}/status` - Agent status
+- `DELETE /api/agents/{id}` - Remove agent
+- `GET /api/agents/stats` - Agent statistics
+
+#### MCP Tools
+- `GET /api/mcp/tools` - List all tools
+- `GET /api/mcp/tools/{id}` - Tool details
+- `POST /api/mcp/execute` - Execute tool
+- `GET /api/mcp/servers` - List MCP servers
+- `POST /api/mcp/servers/{id}/start` - Start server
+- `POST /api/mcp/servers/{id}/stop` - Stop server
+
+#### WebSocket
+- `WS /ws` - WebSocket connection for real-time updates
+
+### Interactive API Docs
+
+Visit http://localhost:8000/api/docs for interactive Swagger UI documentation.
+
+## 💡 Examples
+
+We provide 5 complete workflow examples:
+
+1. **Research Report** (`workflow_01_research_report.py`)
+   - Demonstrates research and report generation
+   
+2. **Code Review** (`workflow_02_code_review.py`)
+   - Automated code quality analysis
+   
+3. **Web Scraping** (`workflow_03_web_scraping.py`)
+   - Web data extraction and analysis
+   
+4. **File Processing** (`workflow_04_file_processing.py`)
+   - Batch file operations
+   
+5. **Multi-Agent Project** (`workflow_05_multi_agent.py`)
+   - Complex multi-agent collaboration
+
+Run any example:
+```bash
+cd examples
+python workflow_01_research_report.py
 ```
 
 ## 🛠️ Development
+
+### Running Tests
+
+```bash
+# Backend tests
+cd backend
+pytest tests/ -v
+
+# Frontend tests
+cd frontend
+npm test
+```
+
+### Code Quality
+
+```bash
+# Backend linting
+cd backend
+ruff check .
+black .
+mypy .
+
+# Frontend linting
+cd frontend
+npm run lint
+npm run format
+```
 
 ### Project Structure
 
@@ -235,128 +366,115 @@ print(agent.json())
 voice-automation-platform/
 ├── backend/
 │   ├── app/
-│   │   ├── agents/          # Agent implementations
-│   │   ├── routes/          # FastAPI routes
+│   │   ├── agents/          # AI agents
 │   │   ├── tools/           # MCP tools
+│   │   ├── routes/          # API endpoints
 │   │   ├── webhooks/        # Webhook system
 │   │   ├── config.py        # Configuration
-│   │   ├── memory_store.py  # Memory management
 │   │   └── main.py          # FastAPI app
-│   └── requirements.txt
-│
+│   ├── requirements.txt
+│   └── .env.example
 ├── frontend/
 │   ├── src/
-│   │   ├── app/             # Next.js app
+│   │   ├── app/             # Next.js pages
 │   │   ├── components/      # React components
 │   │   ├── lib/             # Utilities
-│   │   └── stores/          # Zustand stores
+│   │   └── hooks/           # React hooks
 │   ├── package.json
-│   └── tsconfig.json
-│
+│   └── .env.example
+├── examples/                # Workflow examples
+├── setup.sh                 # Unix setup script
+├── setup.ps1                # Windows setup script
+├── dev-start.sh             # Unix dev launcher
+├── dev-start.ps1            # Windows dev launcher
 └── README.md
 ```
 
-### Adding New Agent Types
+## 🐛 Troubleshooting
 
-1. Create agent in `backend/app/agents/`:
-```python
-from .base import BaseAgent, AgentRole, Task
+### Common Issues
 
-class MyAgent(BaseAgent):
-    def __init__(self):
-        super().__init__(
-            name="My Agent",
-            role=AgentRole.CUSTOM,
-            capabilities=["capability1"]
-        )
-    
-    async def process_task(self, task: Task) -> dict:
-        # Implementation
-        return {"result": "done"}
-```
-
-2. Register in agent registry
-
-### Adding New MCP Tools
-
-1. Create tool in `backend/app/tools/`:
-```python
-from .base import MCPTool, ToolResult
-
-class MyTool(MCPTool):
-    @property
-    def name(self) -> str:
-        return "my_tool"
-    
-    async def execute(self, **kwargs) -> ToolResult:
-        # Implementation
-        return ToolResult(success=True, data={})
-```
-
-2. Register in tool registry
-
-## 📊 Performance
-
-- **Voice Command Processing**: ~2-5 seconds
-- **Agent Task Execution**: ~5-15 seconds
-- **WebSocket Latency**: <100ms
-- **Frontend Load Time**: <1 second
-
-## 🧪 Testing
-
-### Backend Tests
+**Backend won't start:**
 ```bash
-cd backend
-pytest tests/
+# Check Python version
+python3 --version  # Should be 3.9+
+
+# Verify virtual environment
+source backend/venv/bin/activate
+which python  # Should point to venv
+
+# Check dependencies
+pip install -r backend/requirements.txt
 ```
 
-### Frontend Tests
+**Frontend won't start:**
 ```bash
+# Check Node version
+node --version  # Should be 18+
+
+# Clear cache and reinstall
 cd frontend
-npm test
+rm -rf node_modules package-lock.json
+npm install
 ```
 
-## 🔒 Security
+**OpenAI API errors:**
+```bash
+# Verify API key in backend/.env
+grep OPENAI_API_KEY backend/.env
 
-- ✅ CLI command blacklist for dangerous operations
-- ✅ File operations restricted to safe workspace
-- ✅ CORS configuration for frontend access
-- ✅ Environment variable protection
-- ✅ Input validation on all endpoints
+# Test API key
+curl https://api.openai.com/v1/models \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
 
-## 📝 Future Enhancements
+**WebSocket connection fails:**
+- Ensure backend is running on port 8000
+- Check `NEXT_PUBLIC_WS_URL` in frontend/.env.local
+- Verify no firewall blocking WebSocket connections
 
-- [ ] Real Web Speech API integration
-- [ ] Persistent storage (PostgreSQL/MongoDB)
-- [ ] User authentication and authorization
-- [ ] Agent conversation history
-- [ ] Advanced voice command parsing
-- [ ] Multi-language support
-- [ ] Docker containerization
-- [ ] Kubernetes deployment
-- [ ] Performance metrics dashboard
-- [ ] Advanced agent collaboration patterns
+### Debug Mode
+
+Enable debug logging:
+
+```env
+# backend/.env
+DEBUG=True
+LOG_LEVEL=DEBUG
+
+# frontend/.env.local
+NEXT_PUBLIC_ENABLE_DEBUG=true
+```
 
 ## 🤝 Contributing
 
-This is a demonstration project showcasing OpenAI ChatKit integration. Feel free to use it as a starting point for your own projects!
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
 
 ## 📄 License
 
-MIT License - see LICENSE file for details
+This project is open source and available under the MIT License.
 
 ## 🙏 Acknowledgments
 
 - OpenAI ChatKit for the agent framework
-- FastAPI for the backend
-- Next.js and React for the frontend
-- TailwindCSS for styling
+- FastAPI for the backend framework
+- Next.js for the frontend framework
+- The open source community
 
-## 💬 Support
+## 📞 Support
 
-For questions or issues, please open an issue on the GitHub repository.
+For issues and questions:
+- Open a GitHub issue
+- Check the troubleshooting guide
+- Review API documentation at `/api/docs`
 
 ---
 
-Built with ❤️ using OpenAI ChatKit
+**Built with ❤️ using OpenAI ChatKit, FastAPI, and Next.js**
 
