@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from .config import settings
-from .routes import voice, tasks, agents, mcp, websocket
+from .routes import voice, tasks, agents, mcp, websocket, chatkit
 from .webhooks import get_webhook_manager, register_default_handlers
 
 
@@ -93,6 +93,7 @@ async def root():
             "docs": "/api/docs",
             "redoc": "/api/redoc",
             "openapi": "/api/openapi.json",
+            "chatkit": "/api/chatkit",
             "voice": "/api/voice",
             "tasks": "/api/tasks",
             "agents": "/api/agents",
@@ -114,6 +115,7 @@ async def health_check():
 
 
 # API routes
+app.include_router(chatkit.router, tags=["ChatKit"])  # ChatKit session management
 app.include_router(voice.router, prefix="/api/voice", tags=["Voice"])
 app.include_router(tasks.router, prefix="/api/tasks", tags=["Tasks"])
 app.include_router(agents.router, prefix="/api/agents", tags=["Agents"])
@@ -156,4 +158,3 @@ if __name__ == "__main__":
         reload=settings.reload,
         log_level=settings.log_level.lower(),
     )
-

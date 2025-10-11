@@ -17,6 +17,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* ChatKit Web Component Script */}
+        <script
+          src="https://cdn.platform.openai.com/deployments/chatkit/chatkit.js"
+          async
+        />
+      </head>
       <body className={inter.className}>
         <div className="flex h-screen bg-gray-50">
           <Sidebar />
@@ -28,4 +35,3 @@ export default function RootLayout({
     </html>
   );
 }
-
